@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — Game</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        .faq-search-wrap {
+            margin-bottom: var(--space-8);
+        }
+
+        .faq-search {
+            width: 100%;
+            padding: 11px var(--space-4);
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        .faq-search::placeholder {
+            color: var(--text-faint);
+        }
+
+        .faq-search:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        /* ---- Категория ---- */
+        .faq-category {
+            margin-bottom: var(--space-8);
+        }
+
+        .faq-category__title {
+            font-family: var(--font-display);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-3);
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ---- Аккордеон ---- */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            transition: border-color var(--transition);
+        }
+
+        .faq-item.is-open {
+            border-color: rgba(37, 99, 235, 0.35);
+        }
+
+        .faq-item__question {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-4);
+            padding: var(--space-4) var(--space-5);
+            background: none;
+            border: none;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            text-align: left;
+            cursor: pointer;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        .faq-item__question:hover {
+            background: var(--surface-2);
+        }
+
+        .faq-item.is-open .faq-item__question {
+            color: var(--accent);
+            background: var(--surface-2);
+        }
+
+        .faq-item__icon {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            color: var(--text-faint);
+            transition: transform var(--transition), color var(--transition);
+        }
+
+        .faq-item.is-open .faq-item__icon {
+            transform: rotate(45deg);
+            color: var(--accent);
+        }
+
+        .faq-item__body {
+            display: none;
+            padding: var(--space-4) var(--space-5);
+            padding-top: 0;
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .faq-item.is-open .faq-item__body {
+            display: block;
+        }
+
+        /* ---- Пустой стейт (нет результатов поиска) ---- */
+        .faq-empty {
+            display: none;
+            text-align: center;
+            padding: var(--space-12) var(--space-8);
+            color: var(--text-muted);
+        }
+
+        .faq-empty__icon {
+            font-size: 32px;
+            margin-bottom: var(--space-3);
+        }
+
+        .faq-empty__text {
+            font-size: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .faq-item__question {
+                font-size: 14px;
+                padding: var(--space-3) var(--space-4);
+            }
+
+            .faq-item__body {
+                padding: var(--space-3) var(--space-4);
+                padding-top: 0;
+            }
+        }
+        /* ========================
+   Магазин мерча — сетка карточек
+======================== */
+        .merch-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-5);
+            margin-top: var(--space-6);
+            justify-content: center;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: var(--space-4);
+            border-radius: 0 !important;
+            max-width: none;
+            margin: 0;
+            flex: 0 0 240px;
+            max-width: 240px;
+        }
+
+            .product-card img {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+                object-fit: cover;
+                background: var(--surface-2);
+                border: 1px solid var(--border);
+            }
+
+        .product-card__title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            margin: 0;
+            color: var(--text);
+        }
+
+        .product-card__desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .product-card__price {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .product-card__stock {
+            font-size: 12px;
+            color: var(--text-faint);
+            margin-bottom: var(--space-2);
+        }
+
+        .product-card .btn {
+            margin-top: auto;
+        }
+        .faq-item_question {
+            align-items: flex-start;
+        }
+        /* Кнопка вопроса — колонка: label → text → иконка справа */
+        .faq-item__question {
+            position: relative;
+            display: flex;
+            flex-direction: column; /* ← вот это ставит «описание» НАД текстом */
+            align-items: flex-start;
+            gap: 4px;
+            padding: var(--space-4) var(--space-5);
+            padding-right: 48px; /* место под иконку справа */
+            background: none;
+            border: none;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            text-align: left;
+            cursor: pointer;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        /* «Описание» — маленький лейбл над текстом */
+        .faq-item__label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-faint);
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        /* Основной текст вопроса */
+        .faq-item__text {
+            display: block;
+            line-height: 1.5;
+        }
+
+        /* Иконка + в правом верхнем углу */
+        .faq-item__icon {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-5);
+            width: 18px;
+            height: 18px;
+            color: var(--text-faint);
+            transition: transform var(--transition), color var(--transition);
+        }
+
+        .faq-item.is-open .faq-item__question {
+            background: var(--surface-2);
+            color: var(--text); 
+        }
+
+        .faq-item.is-open .faq-item__icon {
+            transform: rotate(45deg);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="./leaderboard.html" class="navbar__logo">
+            Царицино<span style="color:var(--accent)">.</span>
+        </a>
+        <ul class="navbar__links">
+            <li><a href="./leaderboard.html">Статус студента</a></li>
+            <li><a href="./profile.html">Профиль</a></li>
+            <li><a href="./download.html">Новости</a></li>
+            <li><a href="./seller.html">покупки</a></li>
+            <li><a href="./faq.html" class="active">FAQ</a></li>
+        </ul>
+        <!-- Корзина -->
+
+        <div class="cart" id="cart">
+            <button class="cart__toggle" id="cartToggle" aria-label="Корзина">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart__badge" id="cartBadge">0</span>
+            </button>
+            <div class="balance-badge">
+                баланс: <strong id="balanceValue">1000</strong> ₽
+            </div>
+            <!-- Выпадающая корзина -->
+            <div class="cart__popup" id="cartPopup">
+                <div class="cart__promo" id="cartPromo">
+                    <svg class="cart__promo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                    <p>Поздравляем! У вас бесплатная доставка</p>
+                </div>
+
+                <div class="cart__items" id="cartItems">
+                </div>
+
+                <div class="cart__empty" id="cartEmpty">
+                    Корзина пуста
+                </div>
+
+                <div class="cart__footer" id="cartFooter">
+                    <div class="cart__total">
+                        <span>Итого</span>
+                        <span id="cartTotal">0 ₽</span>
+                    </div>
+                    <button class="btn btn--primary" id="cartCheckout">Перейти к оформлению</button>
+                </div>
+            </div>
+        </div>
+        <div class="navbar__user">
+                пользователь: <span id="navUsername">—</span>
+            <a href="./auth.html" id="loginBtn" class="auth-btn">Войти</a>
+        </div>
+    </nav>
+
+    <main class="page">
+        <div id="merchGrid" class="merch-grid">
+            <p class="text-muted">Загрузка...</p>
+        </div>
+    </main>
+
+    <script>
+        // Ник в навбаре
+        const currentUser = sessionStorage.getItem('username');
+        const navUsername = document.getElementById('navUsername');
+        if (currentUser) navUsername.textContent = currentUser;
+
+        // ========================
+        // Отрисовка мерча из БД
+        // ========================
+        async function loadMerchShop() {
+            const grid = document.getElementById('merchGrid');
+            if (!grid) return;
+
+            try {
+                const res = await fetch(`${CONFIG.API}/merch`);
+                const items = await res.json();
+
+                if (!items.length) {
+                    grid.innerHTML = '<p class="text-muted">Товаров пока нет</p>';
+                    return;
+                }
+
+                grid.innerHTML = items.map(m => `
+                <div class="product-card">
+                    <img src="${m.imageUrl || 'https://placehold.co/300x300/37281f/ebe825?text=?'}"
+                         alt="${escapeHtml(m.title)}">
+                    <h3 class="product-card__title">${escapeHtml(m.title)}</h3>
+                    <p class="product-card__desc">${escapeHtml(m.description || '')}</p>
+                    <div class="product-card__price">${m.pricePoints} жетонов</div>
+                    <div class="product-card__stock">Осталось: ${m.stock} шт.</div>
+                    <button class="btn btn--primary"
+                            onclick="addToCart({
+                                id: ${m.id},
+                                name: '${escapeHtml(m.title).replace(/'/g, "\\'")}',
+                                price: ${m.pricePoints},
+                                image: '${m.imageUrl || ''}'
+                            })">
+                        Купить
+                    </button>
+                </div>
+            `).join('');
+            } catch (err) {
+                grid.innerHTML = '<p class="text-error">Ошибка загрузки</p>';
+                console.error(err);
+            }
+        }
+
+        // ========================
+        // XSS-защита
+        // ========================
+        function escapeHtml(s) {
+            return String(s || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // ========================
+        // Поиск по мерчу
+        // ========================
+        document.addEventListener('DOMContentLoaded', () => {
+            const search = document.getElementById('faqSearch');
+            if (search) {
+                search.addEventListener('input', (e) => {
+                    const q = e.target.value.trim().toLowerCase();
+                    let visible = 0;
+
+                    document.querySelectorAll('.product-card').forEach(card => {
+                        const match = !q || card.textContent.toLowerCase().includes(q);
+                        card.style.display = match ? '' : 'none';
+                        if (match) visible++;
+                    });
+
+                    const empty = document.getElementById('faqEmpty');
+                    if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
+                });
+            }
+
+            loadMerchShop();
+        });
+    </script>
+    <script src="./config.js"></script>
+    <script src="./js/cart.js"></script>
+    <script src="./js/auth-ui.js"></script>
+</body>
+</html>

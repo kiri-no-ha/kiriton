@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> На каждой ветке — свой шаблон. На данный момент готовы два: этот и шаблон для сайтов селлеров (ветка [`siteseller`](https://github.com/kiri-no-ha/kiriton/tree/siteseller).
+> На каждой ветке — свой шаблон. На данный момент готовы два: этот и шаблон для сайтов селлеров (ветка [siteseller](https://github.com/kiri-no-ha/kiriton/tree/siteSeller)).
 > В дальнейшем планируется добавить сайты со статьями, форумами и иными формами связи.
 
 ---
